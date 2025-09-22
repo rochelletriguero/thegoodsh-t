@@ -1,7 +1,7 @@
 body {
     background-color: #A60F11;
     color: white;
-    font-family: sans-serif;
+    font-family: 'MuseoModerno', sans-serif;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -9,24 +9,60 @@ body {
     height: 100vh;
     margin: 0;
 }
+
+#splashScreen,
+#gameOverScreen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 40px 60px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
 #gameContainer {
     display: none;
+    position: relative;
+    padding: 20px;
+    border-radius: 15px;
 }
+
+.header {
+    display: flex;
+    justify-content: space-around;
+    width: 500px;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
 canvas {
-    border: 2px solid black;
-    background-color: #FFFFFF;
+    border: 2px solid white;
+    background-color: white;
+    border-radius: 10px;
 }
-#splashScreen {
-    text-align: center;
-}
-#playButton {
-    padding: 10px 20px;
+
+#playButton,
+#playAgainButton {
+    padding: 12px 24px;
     font-size: 1.2em;
     cursor: pointer;
-}
-h1 {
+    background-color: #A60F11;
+    color: white;
+    border: 2px solid white;
+    border-radius: 8px;
+    transition: transform 0.2s;
     font-family: 'MuseoModerno', sans-serif;
 }
-#splashScreen p {
-    font-family: 'League Spartan', sans-serif;
+
+#playButton:hover,
+#playAgainButton:hover {
+    transform: scale(1.05);
+}
+
+.hidden {
+    display: none;
 }

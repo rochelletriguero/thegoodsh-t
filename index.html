@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Burger Muncher</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Font link for Museo Moderno -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- Tone.js library for sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 </head>
 <body>
 
@@ -18,10 +21,18 @@
     </div>
 
     <div id="gameContainer">
-        <h1>Burger Muncher</h1>
-        <p>Lives: <span id="lives">3</span></p>
-        <p>Size: <span id="size">1</span></p>
+        <div class="header">
+            <p>Lives: <span id="lives">3</span></p>
+            <p>Size: <span id="size">1</span></p>
+        </div>
         <canvas id="gameCanvas" width="500" height="300"></canvas>
+    </div>
+
+    <!-- New Game Over Screen -->
+    <div id="gameOverScreen" class="hidden">
+        <h2>Game Over</h2>
+        <p>Final Size: <span id="finalScore">0</span></p>
+        <button id="playAgainButton">Play Again</button>
     </div>
 
     <script src="game.js"></script>
