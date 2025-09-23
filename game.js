@@ -18,6 +18,9 @@ const leaderboardList = document.getElementById('leaderboard');
 const leaderboardLoading = document.getElementById('leaderboardLoading');
 
 // Game variables
+// Set static canvas dimensions to match CSS
+canvas.width = 300;
+canvas.height = 500;
 let character = { x: canvas.width / 2, y: canvas.height - 50, size: 20 };
 let lives = 3;
 let fallingObjects = [];
@@ -42,7 +45,7 @@ badObjectImg.src = 'bomb.png';
 
 // Your Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyB4v0Akz6HmC0OXhQKN59MM-QgFENB-6pQ",
+    apiKey: "YOUR_NEW_API_KEY_HERE",
     authDomain: "burgermuncherleaderboard.firebaseapp.com",
     databaseURL: "https://burgermuncherleaderboard-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "burgermuncherleaderboard",
@@ -203,7 +206,6 @@ function startGame() {
     gameOverScreen.classList.add('hidden');
     gameContainer.style.display = 'block';
     
-    // ADDED: Hide the cursor when the game starts
     document.body.classList.add('no-cursor');
 
     resetGame();
@@ -226,7 +228,6 @@ function endGame() {
     gameRunning = false;
     cancelAnimationFrame(animationFrameId);
 
-    // ADDED: Show the cursor when the game ends
     document.body.classList.remove('no-cursor');
 
     if (gameOverSound) gameOverSound.triggerAttackRelease(['C2', 'G1', 'C1'], '1s');
@@ -302,6 +303,7 @@ playAgainButton.addEventListener('click', startAll);
 
 document.addEventListener('mousemove', (e) => {
     if (gameRunning) {
+        // The clientX value is the same for static and responsive setups
         character.x = e.clientX - canvas.getBoundingClientRect().left;
     }
 });
@@ -309,6 +311,7 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('touchmove', (e) => {
     e.preventDefault(); 
     if (gameRunning) {
+        // The clientX value is the same for static and responsive setups
         character.x = e.touches[0].clientX - canvas.getBoundingClientRect().left;
     }
 }, { passive: false });

@@ -33,7 +33,8 @@ body {
 .header {
     display: flex;
     justify-content: space-around;
-    width: 500px;
+    /* Updated for portrait aspect ratio */
+    width: 300px;
     margin-bottom: 10px;
     font-size: 1.2em;
     font-weight: bold;
@@ -43,6 +44,9 @@ canvas {
     border: 2px solid white;
     background-color: white;
     border-radius: 10px;
+    /* Static dimensions for portrait view */
+    width: 300px;
+    height: 500px;
 }
 
 #playButton,
@@ -67,7 +71,6 @@ canvas {
     display: none;
 }
 
-/* ADDED: Class to hide the cursor */
 .no-cursor {
     cursor: none;
 }
