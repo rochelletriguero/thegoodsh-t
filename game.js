@@ -265,7 +265,7 @@ function loadLeaderboard() {
     leaderboardLoading.style.display = 'block';
     leaderboardList.innerHTML = '';
 
-    database.ref('scores').orderByChild('score').limitToLast(10).once('value', (snapshot) => {
+    database.ref('scores').orderByChild('score').limitToLast(20).once('value', (snapshot) => {
         const scores = [];
         snapshot.forEach((childSnapshot) => {
             scores.push(childSnapshot.val());

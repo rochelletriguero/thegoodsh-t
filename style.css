@@ -88,9 +88,9 @@ body #playerNameInput {
     color: white;
 }
 
-/* --- Added style for scrollable leaderboard --- */
 #leaderboard {
     max-height: 150px; /* Adjust this value as needed */
     overflow-y: auto;
     padding-right: 15px;
+    -webkit-overflow-scrolling: touch; /* This is the key fix for mobile */
 }
