@@ -9,6 +9,13 @@ const sizeDisplay = document.getElementById('size');
 const gameOverScreen = document.getElementById('gameOverScreen');
 const finalScoreDisplay = document.getElementById('finalScore');
 const playAgainButton = document.getElementById('playAgainButton');
+const gameDateDisplay = document.getElementById('gameDate');
+const gameTimeDisplay = document.getElementById('gameTime');
+const playerNameInput = document.getElementById('playerNameInput');
+const playerNameDisplay = document.getElementById('playerNameDisplay');
+const finalPlayerNameDisplay = document.getElementById('finalPlayerName');
+const leaderboardList = document.getElementById('leaderboard');
+const leaderboardLoading = document.getElementById('leaderboardLoading');
 
 // Game variables
 let character = { x: canvas.width / 2, y: canvas.height - 50, size: 20 };
@@ -32,6 +39,23 @@ burgerImg.src = 'burger.png';
 
 const badObjectImg = new Image();
 badObjectImg.src = 'bomb.png';
+
+// Your Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyB4v0Akz6HmC0OXhQKN59MM-QgFENB-6pQ",
+    authDomain: "burgermuncherleaderboard.firebaseapp.com",
+    databaseURL: "https://burgermuncherleaderboard-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "burgermuncherleaderboard",
+    storageBucket: "burgermuncherleaderboard.firebasestorage.app",
+    messagingSenderId: "151543666833",
+    appId: "1:151543666833:web:3c281a1bd2d57ba498c730",
+    measurementId: "G-S8NENLT085"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
 
 function loadImages() {
     return new Promise(resolve => {
@@ -178,20 +202,88 @@ function startGame() {
     splashScreen.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
     gameContainer.style.display = 'block';
+    
+    // ADDED: Hide the cursor when the game starts
+    document.body.classList.add('no-cursor');
+
     resetGame();
     gameRunning = true;
     gameLoop();
+}
+
+function displayDateTime() {
+    const now = new Date();
+    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = now.toLocaleDateString('en-US', dateOptions);
+    const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+    const formattedTime = now.toLocaleTimeString('en-US', timeOptions);
+
+    gameDateDisplay.textContent = formattedDate;
+    gameTimeDisplay.textContent = formattedTime;
 }
 
 function endGame() {
     gameRunning = false;
     cancelAnimationFrame(animationFrameId);
 
+    // ADDED: Show the cursor when the game ends
+    document.body.classList.remove('no-cursor');
+
     if (gameOverSound) gameOverSound.triggerAttackRelease(['C2', 'G1', 'C1'], '1s');
 
-    finalScoreDisplay.textContent = Math.floor(character.size / 2);
+    const finalScore = Math.floor(character.size / 2);
+    const playerName = playerNameInput.value || 'Player 1';
+
+    finalScoreDisplay.textContent = finalScore;
+    finalPlayerNameDisplay.textContent = playerName;
+    
+    saveScore(playerName, finalScore);
+    
+    loadLeaderboard();
+
+    displayDateTime();
+
     gameOverScreen.classList.remove('hidden');
     gameContainer.style.display = 'none';
+}
+
+function saveScore(name, score) {
+    const newScoreRef = database.ref('scores').push();
+    newScoreRef.set({
+        name: name,
+        score: score,
+        timestamp: Date.now()
+    }).then(() => {
+        console.log("Score saved successfully!");
+    }).catch((error) => {
+        console.error("Error saving score:", error);
+    });
+}
+
+function loadLeaderboard() {
+    leaderboardLoading.style.display = 'block';
+    leaderboardList.innerHTML = '';
+
+    database.ref('scores').orderByChild('score').limitToLast(10).once('value', (snapshot) => {
+        const scores = [];
+        snapshot.forEach((childSnapshot) => {
+            scores.push(childSnapshot.val());
+        });
+
+        scores.sort((a, b) => b.score - a.score);
+        
+        leaderboardLoading.style.display = 'none';
+
+        scores.forEach((score) => {
+            const li = document.createElement('li');
+            li.textContent = `${score.name}: ${score.score}`;
+            leaderboardList.appendChild(li);
+        });
+
+    }).catch((error) => {
+        console.error("Error loading leaderboard:", error);
+        leaderboardLoading.textContent = "Error loading leaderboard.";
+    });
 }
 
 async function startAll() {
@@ -200,6 +292,7 @@ async function startAll() {
         initializeAudio();
     }
     await loadImages();
+    playerNameDisplay.textContent = playerNameInput.value || 'Player 1';
     startGame();
 }
 
@@ -212,3 +305,10 @@ document.addEventListener('mousemove', (e) => {
         character.x = e.clientX - canvas.getBoundingClientRect().left;
     }
 });
+
+document.addEventListener('touchmove', (e) => {
+    e.preventDefault(); 
+    if (gameRunning) {
+        character.x = e.touches[0].clientX - canvas.getBoundingClientRect().left;
+    }
+}, { passive: false });

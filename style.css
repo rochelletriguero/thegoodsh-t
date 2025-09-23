@@ -66,3 +66,8 @@ canvas {
 .hidden {
     display: none;
 }
+
+/* ADDED: Class to hide the cursor */
+.no-cursor {
+    cursor: none;
+}

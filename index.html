@@ -5,36 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Burger Muncher</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Font link for Museo Moderno -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <!-- Tone.js library for sound effects -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 </head>
 <body>
 
     <div id="splashScreen">
         <h1>Burger Muncher</h1>
+        <label for="playerNameInput">Enter your name:</label>
+        <input type="text" id="playerNameInput" placeholder="Player 1">
         <p>Catch the burgers and grow, but watch out for the bombs!</p>
         <button id="playButton">Play</button>
     </div>
 
     <div id="gameContainer">
         <div class="header">
+            <p>Player: <span id="playerNameDisplay"></span></p>
             <p>Lives: <span id="lives">3</span></p>
             <p>Size: <span id="size">1</span></p>
         </div>
         <canvas id="gameCanvas" width="500" height="300"></canvas>
     </div>
 
-    <!-- New Game Over Screen -->
     <div id="gameOverScreen" class="hidden">
         <h2>Game Over</h2>
-        <p>Final Size: <span id="finalScore">0</span></p>
+        <p><span id="finalPlayerName"></span>'s Final Size: <span id="finalScore">0</span></p>
+        <p>Date: <span id="gameDate"></span></p>
+        <p>Time: <span id="gameTime"></span></p>
         <button id="playAgainButton">Play Again</button>
+
+        <h3>Leaderboard</h3>
+        <p id="leaderboardLoading">Loading leaderboard...</p>
+        <ol id="leaderboard"></ol>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    
     <script src="game.js"></script>
 </body>
 </html>
