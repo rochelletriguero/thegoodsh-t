@@ -71,6 +71,32 @@ canvas {
     cursor: none;
 }
 
+/* ADDED: Scrollable leaderboard container */
+#leaderboard-container {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 0 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+/* ADDED: Styling for the leaderboard list to make it look nicer */
+#leaderboard {
+    padding-left: 0;
+    list-style-position: inside;
+}
+
+#leaderboard li {
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.9em;
+}
+
+#leaderboard li:last-child {
+    border-bottom: none;
+}
+
 /* Add mobile responsiveness */
 @media (max-width: 600px) {
     #splashScreen,
