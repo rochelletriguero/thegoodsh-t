@@ -74,3 +74,23 @@ canvas {
 .no-cursor {
     cursor: none;
 }
+
+body #playerNameInput {
+    font-size: 16px;
+    padding: 8px;
+    margin: 10px 0;
+    width: 80%;
+    max-width: 250px;
+    text-align: center;
+    border: 2px solid white;
+    border-radius: 8px;
+    background-color: #333;
+    color: white;
+}
+
+/* --- Added style for scrollable leaderboard --- */
+#leaderboard {
+    max-height: 150px; /* Adjust this value as needed */
+    overflow-y: auto;
+    padding-right: 15px;
+}
