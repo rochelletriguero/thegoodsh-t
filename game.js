@@ -18,9 +18,6 @@ const leaderboardList = document.getElementById('leaderboard');
 const leaderboardLoading = document.getElementById('leaderboardLoading');
 
 // Game variables
-// Set static canvas dimensions to match CSS
-canvas.width = 300;
-canvas.height = 500;
 let character = { x: canvas.width / 2, y: canvas.height - 50, size: 20 };
 let lives = 3;
 let fallingObjects = [];
@@ -109,6 +106,36 @@ function initializeAudio() {
     audioInitialized = true;
 }
 
+// Function to resize canvas for responsiveness
+function resizeCanvas() {
+    // Set a base aspect ratio (e.g., 5:3)
+    const aspectRatio = 500 / 300;
+    let newWidth, newHeight;
+    
+    // Check if the window is wider than it is tall
+    if (window.innerWidth / window.innerHeight > aspectRatio) {
+        // Landscape orientation or wide screen: scale to height
+        newHeight = window.innerHeight * 0.9;
+        newWidth = newHeight * aspectRatio;
+    } else {
+        // Portrait orientation or narrow screen: scale to width
+        newWidth = window.innerWidth * 0.9;
+        newHeight = newWidth / aspectRatio;
+    }
+
+    // Set a max width to prevent it from getting too large on desktop
+    const maxWidth = 500;
+    const maxHeight = 300;
+
+    canvas.width = Math.min(newWidth, maxWidth);
+    canvas.height = Math.min(newHeight, maxHeight);
+
+    // Adjust character initial position and size based on new canvas size
+    character.x = canvas.width / 2;
+    character.y = canvas.height - 50;
+    character.size = Math.min(canvas.width * 0.05, 20); // Scale size
+}
+
 function gameLoop() {
     if (!gameRunning) return;
 
@@ -120,10 +147,12 @@ function gameLoop() {
         let obj = fallingObjects[i];
         obj.y += obj.speed;
 
+        // UPDATED: Draw images at a fixed 20x20 size
+        const objectSize = 20; 
         if (obj.type === 'burger') {
-            ctx.drawImage(burgerImg, obj.x, obj.y, 20, 20);
+            ctx.drawImage(burgerImg, obj.x, obj.y, objectSize, objectSize);
         } else {
-            ctx.drawImage(badObjectImg, obj.x, obj.y, 20, 20);
+            ctx.drawImage(badObjectImg, obj.x, obj.y, objectSize, objectSize);
         }
 
         if (checkCollision(character, obj)) {
@@ -162,7 +191,7 @@ function spawnObject() {
 // ✅ Circular collision detection
 function checkCollision(char, obj) {
     const charRadius = char.size / 2;
-    const objRadius = 10; // since the object is 20x20
+    const objRadius = 10; // UPDATED: Collision radius is now a fixed 10 pixels
     const objCenterX = obj.x + objRadius;
     const objCenterY = obj.y + objRadius;
 
@@ -208,6 +237,8 @@ function startGame() {
     
     document.body.classList.add('no-cursor');
 
+    resizeCanvas();
+    
     resetGame();
     gameRunning = true;
     gameLoop();
@@ -303,15 +334,25 @@ playAgainButton.addEventListener('click', startAll);
 
 document.addEventListener('mousemove', (e) => {
     if (gameRunning) {
-        // The clientX value is the same for static and responsive setups
-        character.x = e.clientX - canvas.getBoundingClientRect().left;
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        character.x = (e.clientX - rect.left) * scaleX;
     }
 });
 
 document.addEventListener('touchmove', (e) => {
     e.preventDefault(); 
     if (gameRunning) {
-        // The clientX value is the same for static and responsive setups
-        character.x = e.touches[0].clientX - canvas.getBoundingClientRect().left;
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        character.x = (e.touches[0].clientX - rect.left) * scaleX;
     }
 }, { passive: false });
+
+window.addEventListener('resize', () => {
+    if (gameRunning) {
+        resizeCanvas();
+    }
+});
+
+window.addEventListener('load', resizeCanvas);
