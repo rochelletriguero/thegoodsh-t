@@ -1,185 +1,3 @@
-The Firebase API key you provided is already in the code. I've updated the `game.js` file with your specific key, removing the placeholder text.
-
-Here are the complete, updated codes for your project. Just copy and paste each block into its respective file to ensure everything is correct.
-
------
-
-### `index.html`
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burger Muncher</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-</head>
-<body>
-
-    <div id="splashScreen">
-        <h1>Burger Muncher</h1>
-        <label for="playerNameInput">Enter your name:</label>
-        <input type="text" id="playerNameInput" placeholder="Player 1">
-        <p>Catch the burgers and grow, but watch out for the bombs!</p>
-        <button id="playButton">Play</button>
-    </div>
-
-    <div id="gameContainer">
-        <div class="header">
-            <p>Player: <span id="playerNameDisplay"></span></p>
-            <p>Lives: <span id="lives">3</span></p>
-            <p>Size: <span id="size">1</span></p>
-        </div>
-        <canvas id="gameCanvas" width="500" height="300"></canvas>
-    </div>
-
-    <div id="gameOverScreen" class="hidden">
-        <h2>Game Over</h2>
-        <p><span id="finalPlayerName"></span>'s Final Size: <span id="finalScore">0</span></p>
-        <p>Date: <span id="gameDate"></span></p>
-        <p>Time: <span id="gameTime"></span></p>
-        <button id="playAgainButton">Play Again</button>
-
-        <h3>Leaderboard</h3>
-        <div id="leaderboard-container">
-            <p id="leaderboardLoading">Loading leaderboard...</p>
-            <ol id="leaderboard"></ol>
-        </div>
-    </div>
-
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
-    
-    <script src="game.js"></script>
-</body>
-</html>
-```
-
------
-
-### `style.css`
-
-```css
-body {
-    background-color: #A60F11;
-    color: white;
-    font-family: 'MuseoModerno', sans-serif;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-#splashScreen,
-#gameOverScreen {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 40px 60px;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    z-index: 100;
-}
-
-#gameContainer {
-    display: none;
-    position: relative;
-    padding: 20px;
-    border-radius: 15px;
-}
-
-.header {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 10px;
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-canvas {
-    border: 2px solid white;
-    background-color: white;
-    border-radius: 10px;
-}
-
-#playButton,
-#playAgainButton {
-    padding: 12px 24px;
-    font-size: 1.2em;
-    cursor: pointer;
-    background-color: #A60F11;
-    color: white;
-    border: 2px solid white;
-    border-radius: 8px;
-    transition: transform 0.2s;
-    font-family: 'MuseoModerno', sans-serif;
-}
-
-#playButton:hover,
-#playAgainButton:hover {
-    transform: scale(1.05);
-}
-
-.hidden {
-    display: none;
-}
-
-.no-cursor {
-    cursor: none;
-}
-
-#leaderboard-container {
-    max-height: 150px;
-    overflow-y: auto;
-    margin-top: 10px;
-    padding: 0 10px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
-}
-
-#leaderboard {
-    padding-left: 0;
-    list-style-position: inside;
-}
-
-#leaderboard li {
-    padding: 5px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: 0.9em;
-}
-
-#leaderboard li:last-child {
-    border-bottom: none;
-}
-
-@media (max-width: 600px) {
-    #splashScreen,
-    #gameOverScreen {
-        width: 85%;
-        padding: 20px;
-    }
-
-    .header {
-        width: 100%;
-        padding: 10px;
-    }
-}
-```
-
------
-
-### `game.js`
-
-```javascript
 // Get the HTML elements
 const splashScreen = document.getElementById('splashScreen');
 const gameContainer = document.getElementById('gameContainer');
@@ -200,6 +18,9 @@ const leaderboardList = document.getElementById('leaderboard');
 const leaderboardLoading = document.getElementById('leaderboardLoading');
 
 // Game variables
+// Set static canvas dimensions to match CSS
+canvas.width = 300;
+canvas.height = 500;
 let character = { x: canvas.width / 2, y: canvas.height - 50, size: 20 };
 let lives = 3;
 let fallingObjects = [];
@@ -224,7 +45,7 @@ badObjectImg.src = 'bomb.png';
 
 // Your Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyB4v0Akz6HmC0OXhQKN59MM-QgFENB-6pQ",
+    apiKey: "YOUR_NEW_API_KEY_HERE",
     authDomain: "burgermuncherleaderboard.firebaseapp.com",
     databaseURL: "https://burgermuncherleaderboard-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "burgermuncherleaderboard",
@@ -288,30 +109,6 @@ function initializeAudio() {
     audioInitialized = true;
 }
 
-function resizeCanvas() {
-    const baseWidth = 300;
-    const baseHeight = 500;
-    const aspectRatio = baseWidth / baseHeight;
-    
-    let newWidth = window.innerWidth * 0.9;
-    let newHeight = window.innerHeight * 0.9;
-    
-    if (newWidth / newHeight > aspectRatio) {
-        newWidth = newHeight * aspectRatio;
-    } else {
-        newHeight = newWidth / aspectRatio;
-    }
-
-    const maxWidth = 400;
-    const maxHeight = 667;
-    canvas.width = Math.min(newWidth, maxWidth);
-    canvas.height = Math.min(newHeight, maxHeight);
-
-    character.x = canvas.width / 2;
-    character.y = canvas.height - 50;
-    character.size = Math.min(canvas.width * 0.05, 20);
-}
-
 function gameLoop() {
     if (!gameRunning) return;
 
@@ -323,11 +120,10 @@ function gameLoop() {
         let obj = fallingObjects[i];
         obj.y += obj.speed;
 
-        const objectSize = 20; 
         if (obj.type === 'burger') {
-            ctx.drawImage(burgerImg, obj.x, obj.y, objectSize, objectSize);
+            ctx.drawImage(burgerImg, obj.x, obj.y, 20, 20);
         } else {
-            ctx.drawImage(badObjectImg, obj.x, obj.y, objectSize, objectSize);
+            ctx.drawImage(badObjectImg, obj.x, obj.y, 20, 20);
         }
 
         if (checkCollision(character, obj)) {
@@ -363,9 +159,10 @@ function spawnObject() {
     fallingObjects.push(newObject);
 }
 
+// ✅ Circular collision detection
 function checkCollision(char, obj) {
     const charRadius = char.size / 2;
-    const objRadius = 10;
+    const objRadius = 10; // since the object is 20x20
     const objCenterX = obj.x + objRadius;
     const objCenterY = obj.y + objRadius;
 
@@ -411,8 +208,6 @@ function startGame() {
     
     document.body.classList.add('no-cursor');
 
-    resizeCanvas();
-    
     resetGame();
     gameRunning = true;
     gameLoop();
@@ -508,37 +303,15 @@ playAgainButton.addEventListener('click', startAll);
 
 document.addEventListener('mousemove', (e) => {
     if (gameRunning) {
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        character.x = (e.clientX - rect.left) * scaleX;
+        // The clientX value is the same for static and responsive setups
+        character.x = e.clientX - canvas.getBoundingClientRect().left;
     }
 });
 
 document.addEventListener('touchmove', (e) => {
     e.preventDefault(); 
     if (gameRunning) {
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        character.x = (e.touches[0].clientX - rect.left) * scaleX;
+        // The clientX value is the same for static and responsive setups
+        character.x = e.touches[0].clientX - canvas.getBoundingClientRect().left;
     }
 }, { passive: false });
-
-window.addEventListener('resize', () => {
-    if (gameRunning) {
-        resizeCanvas();
-    }
-});
-
-window.addEventListener('load', resizeCanvas);
-
-// --- Keyboard Zoom Fix ---
-playerNameInput.addEventListener('focus', function() {
-  document.body.style.zoom = "100%";
-  document.body.style.touchAction = "none";
-});
-
-playerNameInput.addEventListener('blur', function() {
-  document.body.style.zoom = ""; 
-  document.body.style.touchAction = "auto";
-});
-```
